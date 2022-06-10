@@ -5,29 +5,14 @@ import { Box, Button, Checkbox, Divider,
 import axios from 'axios';
 import React from 'react'
 import { useState } from 'react';
+import { useForm } from "react-hook-form";
+
+ const AddPersonalAcc = () => {
+  const { register, handleSubmit, formState: { errors } } = useForm();
+  
 
 
-const AddPersonalAcc = () => {
-  const [allValues, setAllValues] = useState({
-    name:"",
-    email:"",
-    password:"", 
-    accountType:"Personal"
-});
-const perUser =  ()=>{
-  let payload = allValues;
-  axios.post("http://localhost:4000/api/v1/useracc",payload).then((res)=>{
-    const dat = res.data
-     console.log(dat,"hello")
-   }).catch((err)=>{
-     console.log(err);
-   })
 
-}
-
-const changeHandler = e =>{
-  setAllValues({...allValues, [e.target.name]: e.target.value})
-}
   return (
     <>
     <Box h={"600"} display={"flex"} justifyContent={"center"} alignItems={"center"}>
@@ -36,16 +21,28 @@ const changeHandler = e =>{
             <Text alignSelf={"flex-start"} className={"text-xl"}>For the purpose of Industry regulation,your details <Spacer/>are required.</Text>
             <Divider />
             <VStack >
-            <FormControl isRequired >
+            <form  onSubmit={handleSubmit((data)=>{
+              
+              axios.post("http://localhost:4000/api/v1/user",data,{userType:"Personal"}).then((res)=>{
+                const dat = res.data
+                 console.log(dat,"hello")
+               }).catch((err)=>{
+                 console.log(err);
+               })
+            })}  >
                 <FormLabel htmlFor='first-name' mt={"4"}>Your fullname</FormLabel>
-                <Input id='your-name' placeholder='First name' name='name' onChange={changeHandler} />
+                <Input id='your-name' placeholder='First name'   {...register("name", {required:"This is required"})}  />
+                <p className='text-red-600'>{errors.name?.message}</p>
                 <FormLabel htmlFor='email-address' mt={"4"}>Enter email adderess</FormLabel>
-                <Input id='email-address' placeholder='Email Your address' name='email' onChange={changeHandler} />
+                <Input id='email-address' placeholder='Email Your address'   {...register("email", {required:"This is required"})}/>
+                <p className='text-red-600'>{errors.name?.message}</p>
                 <FormLabel htmlFor='password' mt={"4"}>Create Password</FormLabel>
-                <Input id='password' placeholder='Enter  Password' name='password' onChange={changeHandler} />
+                <Input id='password' placeholder='Enter  Password' type={"password"}   {...register("password", { required: "This is Required",minLength:{required:"This is Required",value:8,message:"min Length 8 character"} })}  />
+                <p className='text-red-600'>{errors.name?.message}</p>
                 <Checkbox defaultChecked mt={"4"}>I agree to term & conditions</Checkbox>
-                <Button colorScheme='blue'mt={"4"} w={"100%"} onClick={perUser}>Register Account</Button>
-            </FormControl>
+                
+                <Input bgColor={"blue"} mt={"4"} color={"white"} type="submit"  value={"Save & Continue"}  />
+             </form>
             </VStack>
         </VStack>
     </Box>
