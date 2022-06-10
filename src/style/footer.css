@@ -1,0 +1,16 @@
+#footer{
+    background-image: url('../images/f2.jpg');
+    background-position: center;
+    height: 50vh;
+    width: 100%;
+    background-size:cover;
+    background-repeat: no-repeat;
+  }
+  @media screen and (min-width:480px) {
+    #footer{
+      background-size:cover;
+    background-repeat: no-repeat;
+    background-image: url('../images/f2.jpg');
+    }
+    
+  }
